@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style>
+        p {
+            text-transform: uppercase;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #111;
+        }
+
+        .active {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body class="container">
+    <% include ./partials/messages %>
+    <main>
+        <!-- Top Nav Bar -->
+        <ul>
+            <li><a href="/admin">Admin Page</a></li>
+            <li><a href="/customer">Customer</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li style="float:right"><a class="active" href="/users/logout">Logout</a></li>
+            <li style="float:right"><a class="active" href="/profile">Profile</a></li>
+        </ul>
+        <!-- Top Nav Bar -->
+        <div class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 m-auto">
+                        <h3 class="text-center display-4 my-4">Profile</h3>
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseOne" aria-expanded="false"
+                                            aria-controls="collapseOne">
+                                            User Name
+                                        </button>
+                                    </h2>
+                                </div>
+
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <%= user.name %>
+                                        <br>
+                                        <br>
+                                        <form action="/users/profile" method="POST">
+                                            <label for="name">Enter your name</label>
+                                            <input type="name" id="name" name="name" class="form-control" />
+                                            <input type="hidden" id="oldname" name="oldname" value="<%= user.name %>">
+                                            <input type="hidden" id="switch" name="switch" value="1">
+                                            <br>
+                                            <button type="submit" class="btn btn-secondary">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
+                                            Email
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <%= user.email %>
+                                        <br>
+                                        <br>
+                                        <form action="/users/profile" method="POST">
+                                            <label for="email">Enter your email</label>
+                                            <input type="email" id="email" name="email" class="form-control" />
+                                            <input type="hidden" id="oldemail" name="oldemail" value="<%= user.email %>">
+                                            <input type="hidden" id="switch" name="switch" value="2">
+                                            <br>
+                                            <button type="submit" class="btn btn-secondary">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseThree" aria-expanded="false"
+                                            aria-controls="collapseThree">
+                                            Password
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        Change Password <br> <br>
+                                        <form action="/users/profile" method="POST">
+                                            <label for="oldPass">Enter your Current Password</label>
+                                            <input type="password" id="oldPass" name="oldPass" class="form-control" />
+                                            <label for="newPass">Enter your new Password</label>
+                                            <input type="password" id="newPass" name="newPass" class="form-control" />
+                                            <label for="newPass2">Confirm your Password</label>
+                                            <input type="password" id="newPass2" name="newPass2" class="form-control" />
+                                            <input type="hidden" id="switch" name="switch" value="3">
+                                            <input type="hidden" id="email" name="email" value="<%= user.email %>">
+                                            <br>
+                                            <button type="submit" class="btn btn-secondary">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingFour">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseFour" aria-expanded="false"
+                                            aria-controls="collapseFour">
+                                            Admin
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        Admin Access : <%= user.admin %>
+                                        <br> <br>
+                                        <form action="/users/profile" method="POST">
+                                            <select name="admin" id='admin'>
+                                                <option value="false">False</option>
+                                                <option value="true">True</option>
+                                            </select>
+                                            <input type="hidden" id="switch" name="switch" value="4">
+                                            <input type="hidden" id="email" name="email" value="<%= user.email %>">
+                                            <br>
+                                            <br>
+                                            <button type="submit" class="btn btn-secondary">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </main>
+
+    <script>
+        //@ hides and shows cards based on selected dropdown
+        $(document).ready(function () {
+            $("#admin option[value*='" + '<%= user.admin %>' + "']").attr('selected', 'selected');
+        });
+    </script>
+</body>
+
+
+</html>
+
+<!-- Display from database in login-->

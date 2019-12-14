@@ -1,0 +1,165 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <style>
+        .dropdown {
+            left: 50%;
+            margin-left: -50px;
+        }
+
+        .card {
+            flex: 0 0 200px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .main {
+            max-width: none;
+            margin: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #111;
+        }
+
+        .active {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Nav Bar -->
+    <ul>
+        <li><a href="/admin">Admin Page</a></li>
+        <li><a href="/customer">Customer</a></li>
+        <li><a href="/cart">Cart</a></li>
+        <li style="float:right"><a class="active" href="/users/logout">Logout</a></li>
+        <li style="float:right"><a class="active" href="/profile">Profile</a></li>
+    </ul>
+    <!-- Top Nav Bar -->
+    <h3 class="mt-4">Customer Page</h3>
+
+    <% include ./partials/messages %>
+
+
+    <!-- Drop Down-->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Product Sort
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">All</a>
+            <% var array = [] %>
+            <% for(var i = 0; i < ProductVar.length; i++) { 
+                    if(!array.includes(ProductVar[i].product_type)){
+                    array.push(ProductVar[i].product_type);
+                %>
+            <a class="dropdown-item" href="#"><%= ProductVar[i].product_type %></a>
+            <% } %>
+            <% } %>
+        </div>
+    </div>
+    <!-- Drop Down-->
+
+    <div class="main">
+
+        <% if(imgFile) { %>
+        <% imgFile.forEach(function(file, i) {%>
+        <div class="card" id="<%= ProductVar[i].product_type %>">
+            <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="/users/image/<%= file.filename %>" alt="Card image cap">
+            </div>
+            <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4"><%= ProductVar[i].product_name %>
+                    <i class="material-icons" style="float:right">info</i></span>
+                <hr>
+                <div>
+                    <p class="card-text"><small>Stock: <%= ProductVar[i].stock %></small></p>
+                    <p class="card-text"><small>Price: $<%= ProductVar[i].price.toFixed(2) %></small></p>
+                    <p>Quantity</p>
+                    <form action="/users/purchase" method="POST">
+                        <input type="number" name="quantity" min="1" max="<%= ProductVar[i].stock %>" value="0"></input>
+                        <input type="hidden" id="ProductId" name="ProductId" value="<%= ProductVar[i].id %>">
+                        <input type="hidden" id="product_name" name="product_name"
+                            value="<%= ProductVar[i].product_name %>">
+                        <input type="hidden" id="product_type" name="product_type"
+                            value="<%= ProductVar[i].product_type %>">
+                        <input type="hidden" id="stock" name="stock" value="<%= ProductVar[i].stock %>">
+                        <input type="hidden" id="price" name="price" value="<%= ProductVar[i].price %>">
+                        <input type="hidden" id="description" name="description"
+                            value="<%= ProductVar[i].description %>">
+                        <input type="hidden" id="fileId" name="fileId" value="<%= ProductVar[i].fileId %>">
+                        <button type="submit" class="btn btn-primary">Purchase</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4"><%= ProductVar[i].product_name %>
+                    <i class="material-icons right">close</i></span>
+                <p class="card-text">Product Type: <%= ProductVar[i].product_type %></p>
+                <p class="card-text">Stock: <%= ProductVar[i].stock %></p>
+                <p class="card-text">Price: $<%= ProductVar[i].price.toFixed(2) %></p>
+                <p class="card-text">Description: <br> <%= ProductVar[i].description %></p>
+            </div>
+        </div>
+
+        <% }) %>
+        <% } %>
+    </div>
+
+    <script>
+        //@ hides and shows cards based on selected dropdown
+        $(document).ready(function () {
+            $('.dropdown-menu a').on('click', function () {
+                var selText = $(this).text();
+                if (selText == "All") {
+                    $('.card').show();
+                } else {
+                    $("#dropdownMenuButton").text(selText);
+                    $('.card').hide();
+                    $('[id="' + selText + '"]').show(); //attribute selector
+
+                }
+            })
+        });
+    </script>
+</body>

@@ -1,0 +1,30 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>  Password Reset</h1>
+        <% include ./partials/messages %>
+        <form action="/users/reset" method="POST">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="hidden" id="token" name="token" class="form-control" value="<%= token %>" />
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block"> Submit</button>
+            </form>
+        <p class="lead mt-4">
+          Login: <a href="/users/login">Login</a>
+          <br>
+          Register: <a href="/users/register">Register</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+<!-- maybe add a profile page??-->
+<!-- Add Price to cart card-->
+<!-- https://www.npmjs.com/package/nodemailer-mailgun-transport -->
+<!-- https://stackoverflow.com/questions/26956251/sending-emails-using-mailgun-with-nodemailer-package -->
+
+<!-- //http://sahatyalkabov.com/how-to-implement-password-reset-in-nodejs/-->
+

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Cart</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <style>
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+    }
+
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+      background-color: #111;
+    }
+
+    .active {
+      background-color: #4CAF50;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Nav Bar -->
+  <ul>
+    <li><a href="/admin">Admin Page</a></li>
+    <li><a href="/customer">Customer</a></li>
+    <li><a href="/cart">Cart</a></li>
+    <li style="float:right"><a class="active" href="/users/logout">Logout</a></li>
+    <li style="float:right"><a class="active" href="/profile">Profile</a></li>
+  </ul>
+  <!-- Top Nav Bar -->
+
+  <div class="container">
+
+    <h2>User Cart</h2>
+    <p>This is a list of all the items in your cart</p>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Item Total</th>
+
+          <th style="float:right">Delete</th>
+          <th style="float:right">Edit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% for(i = 0; i< InvVar.inventory.length; i++) { %>
+        <tr>
+          <td><%= InvVar.inventory[i].product_name %></td>
+          <td><%= InvVar.inventory[i].product_type %></td>
+          <td><%= InvVar.inventory[i].stock %></td>
+          <td><%= InvVar.inventory[i].price.toFixed(2) %></td>
+          <td><%= (InvVar.inventory[i].price * InvVar.inventory[i].stock).toFixed(2)  %></td>
+          <td style="float:right"><button class="btn" data-toggle="modal" data-target="#delete<%= i %>"><i
+                class="fa fa-trash"></i></button></td>
+
+          <td style="float:right"><button class="btn" data-toggle="modal" data-target="#edit<%= i %>"><i
+                class="fa fa-edit"></i></button></td>
+
+        </tr>
+
+        <!-- Edit Modal -->
+        <div id="edit<%= i %>" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Edit Item</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form action="/users/cart_edit" method="post">
+                  <p>Press Edit to remove item(s) from your cart</p>
+                  <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Enter Quantity"
+                    min="1" max="<%= InvVar.inventory[i].stock %>" step="1"
+                    value="<%= typeof price != 'undefined' ? price : '' %>" />
+                  <input type="hidden" id="product_name" name="product_name"
+                    value="<%= InvVar.inventory[i].product_name %>">
+                  <input type="hidden" id="product_type" name="product_type"
+                    value="<%= InvVar.inventory[i].product_type %>">
+                  <input type="hidden" id="stock" name="stock" value="<%= InvVar.inventory[i].stock %>">
+                  <input type="hidden" id="price" name="price" value="<%= InvVar.inventory[i].price %>">
+                  <input type="hidden" id="description" name="description"
+                    value="<%= InvVar.inventory[i].description %>">
+                  <input type="hidden" id="ProductId" name="ProductId" value="<%= InvVar.inventory[i].ProductId %>">
+                  <input type="hidden" id="_id" name="_id" value="<%= InvVar._id %>">
+                  <button type="submit" class="btn btn-default">Confirm</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Edit Modal -->
+
+        <!-- Delete Modal -->
+        <div id="delete<%= i %>" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Delete Item</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form action="/users/cart_delete" method="post">
+                  <p>Press Confirm to remove all items from your cart</p>
+                  <input type="hidden" id="product_name" name="product_name"
+                    value="<%= InvVar.inventory[i].product_name %>">
+                  <input type="hidden" id="product_type" name="product_type"
+                    value="<%= InvVar.inventory[i].product_type %>">
+                  <input type="hidden" id="stock" name="stock" value="<%= InvVar.inventory[i].stock %>">
+                  <input type="hidden" id="price" name="price" value="<%= InvVar.inventory[i].price %>">
+                  <input type="hidden" id="description" name="description"
+                    value="<%= InvVar.inventory[i].description %>">
+                  <input type="hidden" id="ProductId" name="ProductId" value="<%= InvVar.inventory[i].ProductId %>">
+                  <input type="hidden" id="_id" name="_id" value="<%= InvVar._id %>">
+                  <button type="submit" class="btn btn-default">Confirm</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Delete Modal -->
+        <% } %>
+      </tbody>
+      <tfoot>
+        <% var sum = 0 %>
+        <% var saleTax = 0.0625 %>
+        <% for(i = 0; i< InvVar.inventory.length; i++) { %>
+        <% sum = sum + (InvVar.inventory[i].price * InvVar.inventory[i].stock) %>
+        <% } %>
+        <% var subtotal = sum.toFixed(2) %>
+        <% var tax = (subtotal * saleTax).toFixed(2) %>
+        <% var total = parseFloat(subtotal) + parseFloat(tax) %>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Subtotal <br> MA State Tax <br> Total
+        </th>
+        <th><%= subtotal %> <br> <%= tax %> <br> <%= total %> </th>
+        <% if(InvVar.inventory.length > 0){ %>
+        <th style="float:right"><button class="btn" data-toggle="modal" data-target="#checkout"><i
+              class="fas fa-shopping-cart"></i> <b>Checkout</b></button></th>
+        <% } else { %>
+        <th style="float:right"><button class="btn" data-toggle="modal" data-target="#checkout" disabled><i
+              class="fas fa-shopping-cart"></i> <b>Checkout</b></button></th>
+        <% } %>
+      </tfoot>
+    </table>
+    <div id="checkout" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Checkout</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form action="/users/checkout" method="post">
+              <p>Are you sure you wish to check out?</p>
+              <input type="hidden" id="subtotal" name="subtotal" value="<%= subtotal %>">
+              <input type="hidden" id="tax" name="tax" value="<%= tax %>">
+              <input type="hidden" id="total" name="total" value="<%= total %>">
+              <button type="submit" class="btn btn-default">Confirm</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
