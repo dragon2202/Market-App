@@ -32,7 +32,7 @@ This page allows customers to make purchases and add items to their carts.
 
 ### Cart Page
 This page allows customers to update(remove or add the chosen product) their cart. If customers are sure, this page can also finalize purchases, and send a reciept to the customer's registered email.
-<img src="Market Website/Market Website Cart.png" height="500">
+<img src="Market Website/Cart.png" height="500">
 
 ## Link to my website
 This is a link to my deployed website on Heroku - [Market Website Link](http://ctang-marketwebsite.herokuapp.com/)
